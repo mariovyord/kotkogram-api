@@ -1,7 +1,7 @@
 import Router from 'express';
 import usersController from '../controllers/users.controller';
-import postsController from '../controllers/posts.controller';
-import commentsController from '../controllers/comments.controller';
+// import postsController from '../controllers/posts.controller';
+// import commentsController from '../controllers/comments.controller';
 
 const router = Router();
 
@@ -30,8 +30,8 @@ router.all('/collections', (req, res) => {
         endpoints: ['/comments', '/posts']
     })
 });
-router.use('/collections/posts', postsController);
-router.use('/collections/comments', commentsController);
+// router.use('/collections/posts', postsController);
+// router.use('/collections/comments', commentsController);
 
 // Users (incl. sign up etc.)
 router.use('/api/users', usersController);

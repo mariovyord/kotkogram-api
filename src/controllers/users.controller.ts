@@ -1,11 +1,13 @@
 import Router from 'express';
 import { body, validationResult } from 'express-validator';
+import { IServerResponse } from '../types/IServerResponse';
 
 import { authenticateToken } from '../middleware/auth.middleware';
 
-import { getUserData, patchUserData, } from '../services/users.service';
-import { signup, login, logout } from '../services/auth.service';
+import * as usersService from '../services/users.service';
+import { IUser } from '../types/IUser';
 import mapErrors from '../utils/mapErrors';
+import { PublicUser } from '../classes/PublicUser';
 
 const router = Router();
 
@@ -39,20 +41,30 @@ router.post('/signup',
                 throw (errors.array().map(x => ({ message: x.msg })))
             }
 
-            const userData = req.body;
-            const result = await signup(userData);
+            const userData = req.body as IUser;
+            const result = await usersService.signup(userData);
 
-            res.json({
-                message: 'Sign up successful',
-                result: result,
-            });
+            return res
+                .cookie('jwt', result.token, {
+                    httpOnly: true,
+                    sameSite: false,
+                    secure: true,
+                })
+                .json({
+                    code: 200,
+                    message: 'Signup successful',
+                    data: new PublicUser(result.user),
+                } as IServerResponse);
 
         } catch (err) {
-            res.status(400)
+            return res
+                .status(403)
                 .json({
-                    message: 'Sign up failed',
+                    code: 403,
+                    message: 'Signup failed',
+                    data: undefined,
                     errors: mapErrors(err),
-                })
+                } as IServerResponse);
         }
     });
 
@@ -61,96 +73,116 @@ router.post('/login',
     body('password').trim().escape(),
     async (req, res) => {
         try {
+            // check for errors from validator and throw array of errors if any
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 throw (errors.array().map(x => ({ message: x.msg })))
             }
 
+            // get user data from body and call service
             const userData = req.body;
-            const result = await login(userData.username, userData.password);
+            const result = await usersService.login(userData.username, userData.password);
 
-            res.json({
-                message: 'Login successful',
-                result: result,
-            });
+            // return response
+            return res
+                .cookie('jwt', result.token, {
+                    httpOnly: true,
+                    sameSite: false,
+                    expires: new Date(Date.now() + 900000), // 15 min life
+                    secure: true,
+                })
+                .json({
+                    code: 200,
+                    message: 'Login successful',
+                    data: new PublicUser(result.user),
+                } as IServerResponse);
 
         } catch (err) {
-            return res.status(401)
+            return res
+                .status(403)
                 .json({
-                    message: 'Login up failed',
+                    code: 403,
+                    message: 'Login failed',
+                    data: undefined,
                     errors: mapErrors(err),
-                });
+                } as IServerResponse);
         }
     }
 );
 
 router.delete('/logout',
-    body('refreshToken').trim().not().isEmpty(),
+    authenticateToken(),
     async (req, res) => {
-        try {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                throw new Error();
-            }
-
-            await logout(req.body.refreshToken);
-
-            res.json({
+        return res
+            .clearCookie('jwt')
+            .json({
+                code: 200,
                 message: 'Logout successful',
-            });
-
-        } catch (err) {
-            res.status(400)
-                .json({
-                    message: 'Logout failed',
-                    errors: mapErrors(err),
-                });
-        }
+                data: undefined,
+                errors: undefined,
+            } as IServerResponse);
     }
 )
 
-router.get('/:_id', authenticateToken(), async (req, res, next) => {
-    try {
-        const userId = res.locals.user._id;
-        const requestUserId = req.params._id;
+router.get('/:_id',
+    authenticateToken(),
+    async (req, res) => {
+        try {
+            const requestUserId = req.params._id;
 
-        let isOwner = false;
-        if (userId == requestUserId) isOwner = true;
+            const userData = await usersService.getUserData(requestUserId) as IUser;
 
-        const userData = await getUserData(requestUserId, isOwner);
+            return res.json({
+                code: 200,
+                message: 'User data',
+                data: new PublicUser(userData),
+            } as IServerResponse);
 
-        res.json({
-            message: 'User data',
-            result: userData
-        });
-    } catch (err) {
-        next(err);
-    }
-});
+        } catch (err) {
+            return res
+                .status(403)
+                .json({
+                    code: 404,
+                    message: 'No user found',
+                    data: undefined,
+                    errors: ['No user found'],
+                } as IServerResponse);
+        }
+    });
 
 router.patch('/:_id',
+    body('username').trim().toLowerCase().escape(),
     body('firstName').trim().escape(),
     body('lastName').trim().escape(),
     body('description').trim().escape(),
-    body('password').trim(),
-    body('imageUrl').trim(),
     authenticateToken(),
-    async (req, res, next) => {
+    async (req, res) => {
         try {
             const userId = res.locals.user._id;
-            const requestUserId = req.params._id;
+            const requestUserId = req.params?._id;
 
-            if (userId != requestUserId) throw new Error();
+            if (userId != requestUserId || req.params === undefined) {
+                throw new Error();
+            }
 
-            const data = req.body;
-            const userData = await patchUserData(userId, data);
+            const userData: IUser = await usersService.patchUserData(userId, req.body);
 
-            res.json({
+            return res.json({
+                code: 200,
                 message: 'User data updated',
-                result: userData
-            });
+                data: new PublicUser(userData),
+            } as IServerResponse);
+
         } catch (err) {
-            next(err);
+            return res
+                .clearCookie('jwt')
+                .status(401)
+                .json({
+                    code: 401,
+                    message: 'Unauthorized',
+                    data: undefined,
+                    errors: ['Error updating user'],
+                } as IServerResponse);
         }
     }
 );

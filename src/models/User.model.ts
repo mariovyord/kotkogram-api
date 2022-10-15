@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import beautifyUnique from 'mongoose-beautiful-unique-validation';
+import { IUser } from '../types/IUser';
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema<IUser>({
     username: {
         type: String,
         required: [true, 'Username is required'],
@@ -39,10 +40,6 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Password name is required'],
         minlength: 6,
         maxlength: 60,
-        validate: {
-            validator: noBlacklisterChars,
-            message: 'Password should not contain whitespace or special symbols'
-        }
     },
     description: {
         type: String,
@@ -85,7 +82,6 @@ function noBlacklisterChars(params: string) {
     return /\W/.test(params) === false;
 }
 
+const User = mongoose.model<IUser>('User', userSchema);
 
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+export default User;
