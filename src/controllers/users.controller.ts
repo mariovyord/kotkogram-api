@@ -124,6 +124,33 @@ router.delete('/logout',
     }
 )
 
+router.get('/me',
+    authenticateToken(),
+    async (req, res) => {
+        try {
+            const userId = res.locals.user._id;
+
+            const userData = await usersService.getUserData(userId) as IUser;
+
+            return res.json({
+                code: 200,
+                message: 'User data',
+                data: new PublicUser(userData),
+            } as IServerResponse);
+
+        } catch (err) {
+            return res
+                .clearCookie('jwt')
+                .status(401)
+                .json({
+                    code: 401,
+                    message: 'Unauthorized',
+                    data: undefined,
+                    errors: ['Unauthorized', 'Please login'],
+                } as IServerResponse);
+        }
+    });
+
 router.get('/:_id',
     authenticateToken(),
     async (req, res) => {
@@ -140,7 +167,7 @@ router.get('/:_id',
 
         } catch (err) {
             return res
-                .status(403)
+                .status(404)
                 .json({
                     code: 404,
                     message: 'No user found',
