@@ -11,10 +11,10 @@ const commentSchema = new Schema({
         ref: 'User',
         required: [true, 'Owner ID is required'],
     },
-    answer: {
+    postId: {
         type: Types.ObjectId,
-        ref: 'Answer',
-        required: [true, 'Answer ID is required']
+        ref: 'Post',
+        required: [true, 'Post ID is required']
     },
 },
     { timestamps: true }
