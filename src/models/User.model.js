@@ -2,35 +2,37 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const beautifyUnique = require('mongoose-beautiful-unique-validation');
 
+mongoose.Schema.Types.String.set('trim', true);
+
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: [true, 'Username is required'],
-        minlength: 4,
-        maxlength: 30,
+        minlength: [3, 'Minimum length is 3 characters'],
+        maxlength: [280, 'Maximum length is 280 characters'],
         unique: true,
         validate: {
-            validator: noBlacklisterChars,
+            validator: noBlacklistedChars,
             message: 'Username should not contain whitespace or special symbols'
         }
     },
     firstName: {
         type: String,
         required: [true, 'First name is required'],
-        minlength: 1,
-        maxlength: 30,
+        minlength: [3, 'Minimum length is 3 characters'],
+        maxlength: [280, 'Maximum length is 280 characters'],
         validate: {
-            validator: noBlacklisterChars,
+            validator: noBlacklistedChars,
             message: 'First name should not contain whitespace or special symbols'
         }
     },
     lastName: {
         type: String,
         required: [true, 'Last name is required'],
-        minlength: 1,
-        maxlength: 30,
+        minlength: [3, 'Minimum length is 3 characters'],
+        maxlength: [280, 'Maximum length is 280 characters'],
         validate: {
-            validator: noBlacklisterChars,
+            validator: noBlacklistedChars,
             message: 'Last name should not contain whitespace or special symbols'
         }
     },
@@ -42,7 +44,7 @@ const userSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        maxlength: 100,
+        maxlength: [280, 'Maximum length is 280 characters'],
         default: '',
     },
     imageUrl: {
@@ -77,10 +79,9 @@ userSchema.pre('save', async function (next) {
     next();
 })
 
-function noBlacklisterChars(params) {
+function noBlacklistedChars(params) {
     return /\W/.test(params) === false;
 }
-
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

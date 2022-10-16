@@ -1,4 +1,7 @@
+const mongoose = require('mongoose');
 const { Schema, Types, model } = require('mongoose');
+
+mongoose.Schema.Types.String.set('trim', true);
 
 const postSchema = new Schema({
     imageUrl: {
@@ -8,8 +11,8 @@ const postSchema = new Schema({
     description: {
         type: String,
         required: [true, `Description is required`],
-        minlength: [3, 'Minimum length is 2 characters'],
-        maxlength: [300, 'Maximum length is 1500 characters']
+        minlength: [3, 'Minimum length is 3 characters'],
+        maxlength: [280, 'Maximum length is 280 characters']
     },
     owner: {
         type: Types.ObjectId,

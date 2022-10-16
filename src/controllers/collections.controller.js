@@ -1,6 +1,6 @@
 const Router = require('express');
-const { body } = require('express-validator');
 const { Types } = require('mongoose');
+const { body } = require('express-validator');
 
 const { authenticateToken } = require('../middleware/auth.middleware');
 
@@ -48,9 +48,11 @@ router.get('/:collection', async (req, res, next) => {
 
 // post new
 router.post('/:collection',
-    body('imageUrl').trim().escape(),
-    body('description').trim().escape(),
     authenticateToken(),
+    body('body').optional().escape(),
+    body('postId').optional().escape(),
+    body('imageUrl').optional().escape(),
+    body('description').optional().escape(),
     async (req, res, next) => {
         try {
             const data = req.body;
@@ -100,6 +102,10 @@ router.get('/:collection/:_id', async (req, res, next) => {
 // update one
 router.patch('/:collection/:_id',
     authenticateToken(),
+    body('body').optional().escape(),
+    body('postId').optional().escape(),
+    body('imageUrl').optional().escape(),
+    body('description').optional().escape(),
     async (req, res, next) => {
         try {
             const _id = req.params._id;
