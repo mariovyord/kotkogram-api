@@ -29,9 +29,13 @@ router.use('/api/collections', collectionsController);
 router.use('/api/users', usersController);
 
 router.all('*', (req, res) => {
-    res.status(404).json({
-        message: 'Path not found'
-    })
+    res.status(404)
+        .json({
+            code: 404,
+            message: 'Path not found',
+            data: undefined,
+            errors: ['Path not found']
+        })
 })
 
 module.exports = router;
