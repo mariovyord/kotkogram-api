@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { RequestHandler } from 'express';
-import { IServerResponse } from '../types/IServerResponse';
+import { IServerResponse } from '../types/interfaces';
 
 export const authenticateToken = (): RequestHandler => (req, res, next) => {
     const accessToken = req.cookies.jwt;

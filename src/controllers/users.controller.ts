@@ -1,6 +1,6 @@
 import Router from 'express';
 import { body, validationResult } from 'express-validator';
-import { IServerResponse } from '../types/IServerResponse';
+import { IServerResponse } from '../types/interfaces';
 
 import { authenticateToken } from '../middleware/auth.middleware';
 

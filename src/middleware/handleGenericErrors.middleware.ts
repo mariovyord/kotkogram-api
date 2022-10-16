@@ -1,5 +1,5 @@
 import { ErrorRequestHandler } from "express";
-import { IServerResponse } from "../types/IServerResponse";
+import { IServerResponse } from "../types/interfaces";
 
 // eslint-disable-next-line no-unused-vars
 export const handleErrors = (): ErrorRequestHandler => (err, req, res, next) => {

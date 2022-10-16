@@ -1,7 +1,6 @@
 import Router from 'express';
 import usersController from '../controllers/users.controller';
-// import postsController from '../controllers/posts.controller';
-// import commentsController from '../controllers/comments.controller';
+import postsController from '../controllers/posts.controller';
 
 const router = Router();
 
@@ -24,14 +23,14 @@ router.get('/api', (req, res) => {
 });
 
 // Data Collections
-router.all('/collections', (req, res) => {
+router.all('/api/collections', (req, res) => {
     res.json({
         message: 'Hello to Collections Service',
         endpoints: ['/comments', '/posts']
     })
 });
-// router.use('/collections/posts', postsController);
-// router.use('/collections/comments', commentsController);
+
+router.use('/api/collections/posts', postsController);
 
 // Users (incl. sign up etc.)
 router.use('/api/users', usersController);
