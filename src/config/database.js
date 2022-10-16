@@ -1,11 +1,11 @@
-import mongoose, { ConnectOptions } from 'mongoose';
+const mongoose = require('mongoose');
 
-export const database = async (connectionString: string) => {
+module.exports = async (connectionString) => {
     try {
         await mongoose.connect(connectionString, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-        } as ConnectOptions)
+        })
         console.log('Database connected');
     } catch (err) {
         console.error('Error connecting to database');

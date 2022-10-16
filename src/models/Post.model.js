@@ -1,7 +1,6 @@
-import { Schema, Types, model } from 'mongoose';
-import { IPost } from '../types/interfaces';
+const { Schema, Types, model } = require('mongoose');
 
-const postSchema = new Schema<IPost>({
+const postSchema = new Schema({
     imageUrl: {
         type: String,
         required: [true, `Image is required`],
@@ -27,6 +26,6 @@ const postSchema = new Schema<IPost>({
 )
 
 
-const Post = model<IPost>('Post', postSchema);
+const Post = model('Post', postSchema);
 
-export default Post;
+module.exports = Post;

@@ -1,7 +1,7 @@
-import Router from 'express';
-import usersController from '../controllers/users.controller';
-import postsController from '../controllers/posts.controller';
-import commentsController from '../controllers/comments.controller';
+const Router = require('express');
+const usersController = require('../controllers/users.controller');
+const postsController = require('../controllers/posts.controller');
+const commentsController = require('../controllers/comments.controller');
 
 const router = Router();
 
@@ -43,4 +43,4 @@ router.all('*', (req, res) => {
     })
 })
 
-export default router;
+module.exports = router;

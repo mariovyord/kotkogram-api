@@ -1,9 +1,7 @@
-import User from '../models/User.model';
+const User = require('../models/User.model');
+const jwt = require('jsonwebtoken');
 
-import jwt from 'jsonwebtoken';
-import { IUser } from '../types/IUser';
-
-export const signup = async (userData: IUser) => {
+exports.signup = async (userData) => {
     const existing = await User.findOne({ username: userData.username.toLowerCase() });
 
     if (existing) {
@@ -21,7 +19,7 @@ export const signup = async (userData: IUser) => {
     }
 }
 
-export const login = async (username: string, password: string) => {
+exports.login = async (username, password) => {
     const user = await User.findOne({ username: username });
 
     if (!user) {
@@ -42,7 +40,7 @@ export const login = async (username: string, password: string) => {
     }
 }
 
-async function createToken(userData: IUser) {
+async function createToken(userData) {
     return jwt.sign(
         { _id: userData._id.toString() },
         `${process.env.JWT_SECRET}`,
@@ -50,11 +48,11 @@ async function createToken(userData: IUser) {
     )
 }
 
-export const getUserData = async (userId: string) => {
+exports.getUserData = async (userId) => {
     return User.findById(userId).select('-password -__v');
 }
 
-export const patchUserData = async (userId: string, data: Partial<IUser>) => {
+exports.patchUserData = async (userId, data) => {
     const user = await User.findById(userId);
 
     if (!user) throw new Error();

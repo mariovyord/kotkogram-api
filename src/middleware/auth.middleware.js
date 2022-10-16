@@ -1,8 +1,6 @@
-import jwt from 'jsonwebtoken';
-import { RequestHandler } from 'express';
-import { IServerResponse } from '../types/interfaces';
+const jwt = require('jsonwebtoken');
 
-export const authenticateToken = (): RequestHandler => (req, res, next) => {
+exports.authenticateToken = () => (req, res, next) => {
     const accessToken = req.cookies.jwt;
 
     if (!accessToken) {
@@ -13,10 +11,10 @@ export const authenticateToken = (): RequestHandler => (req, res, next) => {
                 message: 'Unauthorized',
                 data: undefined,
                 errors: ['Access Token needed to continue']
-            } as IServerResponse);
+            });
     }
 
-    jwt.verify(accessToken, process.env.JWT_SECRET as string, (err: any, user: any) => {
+    jwt.verify(accessToken, process.env.JWT_SECRET, (err, user) => {
         if (err) {
             return res
                 .clearCookie('jwt')
@@ -26,7 +24,7 @@ export const authenticateToken = (): RequestHandler => (req, res, next) => {
                     message: 'Forbidden',
                     data: undefined,
                     errors: ['Access Token not valid']
-                } as IServerResponse);
+                });
         } else {
             res.locals.user = user;
             next();

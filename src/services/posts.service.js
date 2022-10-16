@@ -1,9 +1,6 @@
-import { Types } from 'mongoose';
-import QueryString from 'qs';
-import Post from '../models/Post.model';
-import { IPost } from '../types/interfaces';
+const Post = require('../models/Post.model');
 
-export const getOne = async (_id: string, query: QueryString.ParsedQs) => {
+exports.getOne = async (_id, query) => {
     // Populate properties
     let populate = '';
     let limitPopulate = ''
@@ -11,7 +8,7 @@ export const getOne = async (_id: string, query: QueryString.ParsedQs) => {
     if (query.populate) {
         populate += query.populate;
 
-        if ((query.populate as string).includes('owner')) {
+        if (query.populate.includes('owner')) {
             limitPopulate += 'firstName lastName imageUrl'
         }
     }
@@ -20,14 +17,14 @@ export const getOne = async (_id: string, query: QueryString.ParsedQs) => {
         .populate(populate, limitPopulate);
 }
 
-export const create = async (data: Partial<IPost>) => {
+exports.create = async (data) => {
     const result = new Post(data);
     await result.save();
     return result;
 }
 
-export const update = async (_id: string, userId: string, data: any) => {
-    const post = await Post.findById(_id) as any;
+exports.update = async (_id, userId, data) => {
+    const post = await Post.findById(_id);
 
     if (post === null) throw new Error();
     if (post.owner != userId) throw new Error('Only owners can update items!');
@@ -41,7 +38,7 @@ export const update = async (_id: string, userId: string, data: any) => {
     return post;
 }
 
-export const remove = async (_id: string, userId: string) => {
+exports.remove = async (_id, userId) => {
     const post = await Post.findById(_id);
     if (post === null) throw new Error('Post does not exist');
 
@@ -50,7 +47,7 @@ export const remove = async (_id: string, userId: string) => {
     post.remove()
 }
 
-export const like = async (itemId: string, userId: Types.ObjectId) => {
+exports.like = async (itemId, userId) => {
     const post = await Post.findById(itemId);
     if (post === null) throw new Error('Post does not exist');
 

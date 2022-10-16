@@ -1,10 +1,9 @@
-import dotenv from 'dotenv';
-import express from 'express';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
-import router from './router/router';
-
-import { handleErrors } from './middleware/handleGenericErrors.middleware';
+const dotenv = require('dotenv');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const router = require('./router/router');
+const { handleErrors } = require('./middleware/handleGenericErrors.middleware');
 
 // init App
 const app = express();
@@ -23,4 +22,4 @@ app.use(express.urlencoded({ extended: true }));
 app.use(router);
 app.use(handleErrors());
 
-export default app;
+module.exports = app;

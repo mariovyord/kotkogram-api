@@ -1,10 +1,9 @@
-import Router from 'express';
-import { body } from 'express-validator';
-import { authenticateToken } from '../middleware/auth.middleware';
-import * as commentsService from '../services/comments.service';
-import * as collectionsService from '../services/collections.service';
-import { IServerResponse } from '../types/interfaces';
-import Comment from '../models/Comment.model';
+const Router = require('express');
+const { body } = require('express-validator');
+const { authenticateToken } = require('../middleware/auth.middleware');
+const commentsService = require('../services/comments.service');
+const collectionsService = require('../services/collections.service');
+const Comment = require('../models/Comment.model');
 
 const router = Router();
 
@@ -15,13 +14,11 @@ router.get('/', async (req, res, next) => {
 
         const result = await collectionsService.getAll(Comment, query);
 
-        const responseJson: IServerResponse = {
+        return res.json({
             code: 200,
             message: `List of comments`,
             data: result,
-        }
-
-        return res.json(responseJson);
+        });
 
     } catch (err) {
         console.log(err)
@@ -40,14 +37,12 @@ router.post('/',
 
             const result = await commentsService.create({ owner: userId, ...data });
 
-            const responseJson: IServerResponse = {
-                code: 201,
-                message: `Created item in comments`,
-                data: result,
-            }
-
             return res.status(201)
-                .json(responseJson);
+                .json({
+                    code: 201,
+                    message: `Created item in comments`,
+                    data: result,
+                });
 
         } catch (err) {
             next(err);
@@ -61,13 +56,11 @@ router.get('/:_id', async (req, res, next) => {
         const query = req.query;
         const result = await commentsService.getOne(_id, query);
 
-        const responseJson: IServerResponse = {
+        return res.json({
             code: 200,
             message: `Details of item in comments`,
             data: result,
-        }
-
-        return res.json(responseJson);
+        });
 
     } catch (err) {
         next(err);
@@ -84,13 +77,11 @@ router.patch('/:_id',
 
             const result = await commentsService.update(_id, userId, req.body);
 
-            const responseJson: IServerResponse = {
+            return res.json({
                 code: 200,
                 message: `Updated item in comments`,
                 data: result
-            }
-
-            return res.json(responseJson);
+            });
 
         } catch (err) {
             next(err);
@@ -105,17 +96,15 @@ router.delete('/:_id', authenticateToken(), async (req, res, next) => {
 
         await commentsService.remove(_id, userId);
 
-        const responseJson: IServerResponse = {
+        return res.status(202).json({
             code: 202,
             message: `Deleted item in comments`,
             data: undefined,
-        }
-
-        return res.status(202).json(responseJson);
+        });
 
     } catch (err) {
         next(err);
     }
 });
 
-export default router;
+module.exports = router;

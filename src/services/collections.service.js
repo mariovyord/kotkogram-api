@@ -1,32 +1,29 @@
-import { Model, SortOrder } from 'mongoose';
-import QueryString from 'qs';
-
-export const getAll = async (Collection: Model<any>, query: QueryString.ParsedQs) => {
-    const options: { [key: string]: string | string[] } = {};
+exports.getAll = async (Collection, query) => {
+    const options = {};
     console.log(query)
     // Search
     if (Array.isArray(query.where)) {
-        (query.where as string[])
+        query.where
             .forEach(x => {
                 const [prop, value] = x.split('=');
                 options[prop] = value;
             })
     } else if (typeof query.where === 'string') {
-        const [prop, value] = (query.where as string).split('=');
+        const [prop, value] = query.where.split('=');
         options[prop] = value;
     }
 
     // Sort
-    const sort: { [key: string]: SortOrder } = {};
+    const sort = {};
     if (Array.isArray(query.sortBy)) {
-        (query.sortBy as string[])
+        query.sortBy
             .forEach(x => {
                 const [sortProp, order] = x.split(' ');
-                sort[sortProp] = order as SortOrder;
+                sort[sortProp] = order;
             })
     } else if (typeof query.sortBy === 'string') {
-        const [sortProp, order] = (query.sortBy as string).split(' ');
-        sort[sortProp] = order as SortOrder;
+        const [sortProp, order] = (query.sortBy).split(' ');
+        sort[sortProp] = order;
     } else {
         sort.createdAt = 'asc';
     }
@@ -38,8 +35,8 @@ export const getAll = async (Collection: Model<any>, query: QueryString.ParsedQs
     }
 
     if (query.page && query.pageSize) {
-        pagination.limit = parseInt(query.pageSize as string);
-        pagination.skip = Math.max(0, (parseInt(query.page as string) - 1)) * pagination.limit;
+        pagination.limit = parseInt(query.pageSize);
+        pagination.skip = Math.max(0, (parseInt(query.page) - 1)) * pagination.limit;
     }
 
     // Populate properties
@@ -52,7 +49,7 @@ export const getAll = async (Collection: Model<any>, query: QueryString.ParsedQs
         populate += query.populate;
     }
 
-    if (query.populate && (query.populate as string).includes('owner')) {
+    if (query.populate && (query.populate).includes('owner')) {
         limitPopulate += 'username firstName lastName imageUrl'
     }
 

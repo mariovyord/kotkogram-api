@@ -1,4 +1,4 @@
-export default (err: any) => {
+module.exports = (err) => {
     if (Array.isArray(err)) {
         return err;
     } else if (typeof err === 'string') {

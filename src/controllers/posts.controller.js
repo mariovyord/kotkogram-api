@@ -1,11 +1,10 @@
-import Router from 'express';
-import { body } from 'express-validator';
-import { Types } from 'mongoose';
-import { authenticateToken } from '../middleware/auth.middleware';
-import * as postsService from '../services/posts.service';
-import * as collectionsService from '../services/collections.service';
-import Post from '../models/Post.model';
-import { IServerResponse } from '../types/interfaces';
+const Router = require('express');
+const { body } = require('express-validator');
+const { Types } = require('mongoose');
+const { authenticateToken } = require('../middleware/auth.middleware');
+const postsService = require('../services/posts.service');
+const collectionsService = require('../services/collections.service');
+const Post = require('../models/Post.model');
 
 const router = Router();
 
@@ -16,7 +15,7 @@ router.get('/', async (req, res, next) => {
 
         const result = await collectionsService.getAll(Post, query);
 
-        const responseJson: IServerResponse = {
+        const responseJson = {
             code: 200,
             message: `List of posts`,
             data: result,
@@ -41,7 +40,7 @@ router.post('/',
 
             const result = await postsService.create({ owner: userId, ...data });
 
-            const responseJson: IServerResponse = {
+            const responseJson = {
                 code: 201,
                 message: `Created item in posts`,
                 data: result,
@@ -62,7 +61,7 @@ router.get('/:_id', async (req, res, next) => {
         const query = req.query;
         const result = await postsService.getOne(_id, query);
 
-        const responseJson: IServerResponse = {
+        const responseJson = {
             code: 200,
             message: `Details of item in posts`,
             data: result,
@@ -85,7 +84,7 @@ router.patch('/:_id',
 
             const result = await postsService.update(_id, userId, req.body);
 
-            const responseJson: IServerResponse = {
+            const responseJson = {
                 code: 200,
                 message: `Updated item in posts`,
                 data: result
@@ -108,7 +107,7 @@ router.post('/:_id/like',
 
             const result = await postsService.like(postId, new Types.ObjectId(userId));
 
-            const responseJson: IServerResponse = {
+            const responseJson = {
                 code: 200,
                 message: `Voted for item in posts`,
                 data: result,
@@ -129,7 +128,7 @@ router.delete('/:_id', authenticateToken(), async (req, res, next) => {
 
         await postsService.remove(_id, userId);
 
-        const responseJson: IServerResponse = {
+        const responseJson = {
             code: 202,
             message: `Deleted item in posts`,
             data: undefined,
@@ -142,4 +141,4 @@ router.delete('/:_id', authenticateToken(), async (req, res, next) => {
     }
 });
 
-export default router;
+module.exports = router;

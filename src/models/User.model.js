@@ -1,9 +1,8 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
-import beautifyUnique from 'mongoose-beautiful-unique-validation';
-import { IUser } from '../types/IUser';
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const beautifyUnique = require('mongoose-beautiful-unique-validation');
 
-const userSchema = new mongoose.Schema<IUser>({
+const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: [true, 'Username is required'],
@@ -61,7 +60,7 @@ const userSchema = new mongoose.Schema<IUser>({
 
 userSchema.plugin(beautifyUnique);
 
-userSchema.methods.comparePassword = async function (password: string) {
+userSchema.methods.comparePassword = async function (password) {
     return bcrypt.compare(password, this.password);
 }
 
@@ -78,10 +77,10 @@ userSchema.pre('save', async function (next) {
     next();
 })
 
-function noBlacklisterChars(params: string) {
+function noBlacklisterChars(params) {
     return /\W/.test(params) === false;
 }
 
-const User = mongoose.model<IUser>('User', userSchema);
+const User = mongoose.model('User', userSchema);
 
-export default User;
+module.exports = User;

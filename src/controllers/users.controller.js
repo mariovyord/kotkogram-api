@@ -1,13 +1,11 @@
-import Router from 'express';
-import { body, validationResult } from 'express-validator';
-import { IServerResponse } from '../types/interfaces';
+const Router = require('express');
+const { body, validationResult } = require('express-validator');
 
-import { authenticateToken } from '../middleware/auth.middleware';
+const { authenticateToken } = require('../middleware/auth.middleware');
 
-import * as usersService from '../services/users.service';
-import { IUser } from '../types/IUser';
-import mapErrors from '../utils/mapErrors';
-import { PublicUser } from '../common/PublicUser';
+const usersService = require('../services/users.service');
+const mapErrors = require('../utils/mapErrors');
+const { PublicUser } = require('../common/PublicUser');
 
 const router = Router();
 
@@ -41,7 +39,7 @@ router.post('/signup',
                 throw (errors.array().map(x => ({ message: x.msg })))
             }
 
-            const userData = req.body as IUser;
+            const userData = req.body;
             const result = await usersService.signup(userData);
 
             return res
@@ -54,7 +52,7 @@ router.post('/signup',
                     code: 200,
                     message: 'Signup successful',
                     data: new PublicUser(result.user),
-                } as IServerResponse);
+                });
 
         } catch (err) {
             return res
@@ -64,7 +62,7 @@ router.post('/signup',
                     message: 'Signup failed',
                     data: undefined,
                     errors: mapErrors(err),
-                } as IServerResponse);
+                });
         }
     });
 
@@ -95,7 +93,7 @@ router.post('/login',
                     code: 200,
                     message: 'Login successful',
                     data: new PublicUser(result.user),
-                } as IServerResponse);
+                });
 
         } catch (err) {
             return res
@@ -105,7 +103,7 @@ router.post('/login',
                     message: 'Login failed',
                     data: undefined,
                     errors: mapErrors(err),
-                } as IServerResponse);
+                });
         }
     }
 );
@@ -120,7 +118,7 @@ router.delete('/logout',
                 message: 'Logout successful',
                 data: undefined,
                 errors: undefined,
-            } as IServerResponse);
+            });
     }
 )
 
@@ -130,13 +128,13 @@ router.get('/me',
         try {
             const userId = res.locals.user._id;
 
-            const userData = await usersService.getUserData(userId) as IUser;
+            const userData = await usersService.getUserData(userId);
 
             return res.json({
                 code: 200,
                 message: 'User data',
                 data: new PublicUser(userData),
-            } as IServerResponse);
+            });
 
         } catch (err) {
             return res
@@ -147,7 +145,7 @@ router.get('/me',
                     message: 'Unauthorized',
                     data: undefined,
                     errors: ['Unauthorized', 'Please login'],
-                } as IServerResponse);
+                });
         }
     });
 
@@ -157,13 +155,13 @@ router.get('/:_id',
         try {
             const requestUserId = req.params._id;
 
-            const userData = await usersService.getUserData(requestUserId) as IUser;
+            const userData = await usersService.getUserData(requestUserId);
 
             return res.json({
                 code: 200,
                 message: 'User data',
                 data: new PublicUser(userData),
-            } as IServerResponse);
+            });
 
         } catch (err) {
             return res
@@ -173,7 +171,7 @@ router.get('/:_id',
                     message: 'No user found',
                     data: undefined,
                     errors: ['No user found'],
-                } as IServerResponse);
+                });
         }
     });
 
@@ -192,13 +190,13 @@ router.patch('/:_id',
                 throw new Error();
             }
 
-            const userData: IUser = await usersService.patchUserData(userId, req.body);
+            const userData = await usersService.patchUserData(userId, req.body);
 
             return res.json({
                 code: 200,
                 message: 'User data updated',
                 data: new PublicUser(userData),
-            } as IServerResponse);
+            });
 
         } catch (err) {
             return res
@@ -209,10 +207,10 @@ router.patch('/:_id',
                     message: 'Unauthorized',
                     data: undefined,
                     errors: ['Error updating user'],
-                } as IServerResponse);
+                });
         }
     }
 );
 
-export default router;
+module.exports = router;
 

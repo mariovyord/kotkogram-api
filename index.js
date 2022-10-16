@@ -1,5 +1,5 @@
-import app from './app';
-import { database } from './config/database';
+const app = require('./src/app');
+const database = require('./src/config/database');
 
 const port = process.env.PORT || 5000;
 const connectionString = process.env.CONNECTION_STRING || 'mongodb://localhost:27017/kotkogram-api';
