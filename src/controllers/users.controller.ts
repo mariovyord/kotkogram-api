@@ -7,7 +7,7 @@ import { authenticateToken } from '../middleware/auth.middleware';
 import * as usersService from '../services/users.service';
 import { IUser } from '../types/IUser';
 import mapErrors from '../utils/mapErrors';
-import { PublicUser } from '../classes/PublicUser';
+import { PublicUser } from '../common/PublicUser';
 
 const router = Router();
 

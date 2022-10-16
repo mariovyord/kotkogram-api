@@ -3,6 +3,8 @@ import { body } from 'express-validator';
 import { Types } from 'mongoose';
 import { authenticateToken } from '../middleware/auth.middleware';
 import * as postsService from '../services/posts.service';
+import * as collectionsService from '../services/collections.service';
+import Post from '../models/Post.model';
 import { IServerResponse } from '../types/interfaces';
 
 const router = Router();
@@ -12,7 +14,7 @@ router.get('/', async (req, res, next) => {
     try {
         const query = req.query;
 
-        const result = await postsService.getAll(query);
+        const result = await collectionsService.getAll(Post, query);
 
         const responseJson: IServerResponse = {
             code: 200,

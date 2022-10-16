@@ -2,7 +2,9 @@ import Router from 'express';
 import { body } from 'express-validator';
 import { authenticateToken } from '../middleware/auth.middleware';
 import * as commentsService from '../services/comments.service';
+import * as collectionsService from '../services/collections.service';
 import { IServerResponse } from '../types/interfaces';
+import Comment from '../models/Comment.model';
 
 const router = Router();
 
@@ -11,7 +13,7 @@ router.get('/', async (req, res, next) => {
     try {
         const query = req.query;
 
-        const result = await commentsService.getAll(query);
+        const result = await collectionsService.getAll(Comment, query);
 
         const responseJson: IServerResponse = {
             code: 200,
@@ -22,6 +24,7 @@ router.get('/', async (req, res, next) => {
         return res.json(responseJson);
 
     } catch (err) {
+        console.log(err)
         next(err);
     }
 })
