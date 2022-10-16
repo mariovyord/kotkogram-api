@@ -57,12 +57,10 @@ exports.patchUserData = async (userId, data) => {
 
     if (!user) throw new Error();
 
-    if (data.username) user.username = data.username;
-    if (data.firstName) user.firstName = data.firstName;
-    if (data.lastName) user.lastName = data.lastName;
-    if (data.imageUrl) user.imageUrl = data.imageUrl;
-    if (data.description) user.description = data.description;
-    if (data.password) user.password = data.password;
+    for (let key of Object.keys(data)) {
+        console.log(key);
+        user[key] = data[key];
+    }
 
     await user.save();
     return user;

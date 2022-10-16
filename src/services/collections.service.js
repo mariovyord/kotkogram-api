@@ -78,3 +78,68 @@ exports.getAll = async (Collection, query) => {
 
     return result;
 }
+
+exports.getOne = async (collection, _id, query) => {
+    // Populate properties
+    let populate = '';
+    let limitPopulate = ''
+
+    if (query.populate) {
+        populate += query.populate;
+
+        if (query.populate.includes('owner')) {
+            limitPopulate += 'firstName lastName imageUrl'
+        }
+    }
+    return collection
+        .findById(_id)
+        .populate(populate, limitPopulate);
+}
+
+exports.create = async (collection, data) => {
+    const result = new collection(data);
+    await result.save();
+    return result;
+}
+
+exports.update = async (collection, _id, userId, data) => {
+    const post = await collection.findById(_id);
+
+    if (post === null) throw new Error();
+    if (post.owner != userId) throw new Error('Only owners can update items!');
+
+    for (const key of Object.keys(data)) {
+        post[key] = data[key];
+    }
+
+    await post.save();
+
+    return post;
+}
+
+exports.remove = async (collection, _id, userId) => {
+    const post = await collection.findById(_id);
+    if (post === null) throw new Error('Item does not exist');
+
+    if (post.owner != userId) throw new Error('Only owners can delete items')
+
+    post.remove()
+}
+
+exports.like = async (collection, itemId, userId) => {
+    const post = await collection.findById(itemId);
+    if (post === null) throw new Error('Item does not exist');
+
+    const existingIndex = post.likes.indexOf(userId);
+
+    if (existingIndex !== -1) {
+        post.likes.splice(existingIndex, 1);
+    } else {
+        post.likes.push(userId);
+    }
+
+    await post.save();
+
+    return post;
+}
+

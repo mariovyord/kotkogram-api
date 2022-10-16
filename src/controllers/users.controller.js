@@ -5,7 +5,7 @@ const { authenticateToken } = require('../middleware/auth.middleware');
 
 const usersService = require('../services/users.service');
 const mapErrors = require('../utils/mapErrors');
-const { PublicUser } = require('../common/PublicUser');
+const PublicUser = require('../common/PublicUser');
 
 const router = Router();
 
@@ -176,10 +176,10 @@ router.get('/:_id',
     });
 
 router.patch('/:_id',
-    body('username').trim().toLowerCase().escape(),
-    body('firstName').trim().escape(),
-    body('lastName').trim().escape(),
-    body('description').trim().escape(),
+    // body('username').trim().toLowerCase().escape(),
+    // body('firstName').trim().escape(),
+    // body('lastName').trim().escape(),
+    // body('description').trim().escape(),
     authenticateToken(),
     async (req, res) => {
         try {
@@ -189,7 +189,7 @@ router.patch('/:_id',
             if (userId != requestUserId || req.params === undefined) {
                 throw new Error();
             }
-
+            console.log('req.body)', req.body)
             const userData = await usersService.patchUserData(userId, req.body);
 
             return res.json({
@@ -199,6 +199,7 @@ router.patch('/:_id',
             });
 
         } catch (err) {
+            console.log(err)
             return res
                 .clearCookie('jwt')
                 .status(401)
