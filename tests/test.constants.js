@@ -1,0 +1,1 @@
+exports.testConnectionString = 'mongodb://localhost:27017/kotkogram-api-test';

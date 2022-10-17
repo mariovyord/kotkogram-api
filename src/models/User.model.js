@@ -73,6 +73,8 @@ userSchema.pre('save', function (next) {
 
 userSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
+        if (!noBlacklistedChars(this.password)) throw new Error('Password should not contain whitespace or special symbols')
+
         this.password = await bcrypt.hash(this.password, 10);
         console.log('Hashing new password');
     }

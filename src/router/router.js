@@ -10,13 +10,16 @@ router.use((req, res, next) => {
 })
 
 router.get('/', (req, res) => {
-    res.json({
-        message: 'Path should start with /api',
-    })
+    res.status(404)
+        .json({
+            code: 404,
+            message: 'Path should start with /api',
+        })
 });
 
 router.get('/api', (req, res) => {
     res.json({
+        code: 200,
         message: 'Hello to Kotkogram REST API',
         endpoints: ['/users', '/collections']
     })
