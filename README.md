@@ -86,7 +86,7 @@ You can put multiple queries of the same type.
 
 Example:
 
-```js
+```http
 GET /api/collections/posts/62cd7b659032c071e10e4f8e?populate=owner&populate=post
 ```
 
@@ -96,7 +96,7 @@ Append URL encoded string `sortBy={property asc/desc}` to the query parameters t
 
 Example:
 
-```js
+```http
 (unencoded) /api/collections/posts?sortBy=createdAt desc
 GET /api/collections/posts?sortBy=createdAt%20desc
 ```
@@ -107,7 +107,7 @@ Append URL encoded string `where={property=value}` to the query parameters. Only
 
 Example:
 
-```js
+```http
 (unencoded) /api/collections/posts?where=owner=8f414b4fab394d36bedb2ad69da9c830
 GET /api/collections/posts?where=owner%3D%228f414b4fab394d36bedb2ad69da9c830%22
 ```
@@ -120,7 +120,7 @@ Append `page={pageNumber}&pageSize={entries}` to the query parameters, where `{p
 
 Example: Second page of entries from the answers collection, assuming 10 entries per page:
 
-```js
+```http
 GET /api/collections/posts?page=2&pageSize=10
 ```
 
@@ -129,7 +129,7 @@ GET /api/collections/posts?page=2&pageSize=10
 Append `populate={property}` to the query parameters, where `{property}` is the property you want to populate with data.
 Example:
 
-```js
+```http
 GET /api/collections/posts/62cd7b659032c071e10e4f8e?populate=owner
 ```
 
@@ -138,7 +138,7 @@ GET /api/collections/posts/62cd7b659032c071e10e4f8e?populate=owner
 Append `count=true` to the query parameters. It can be combined with `SEARCH` query.
 Example:
 
-```js
+```http
 GET /api/collections/posts?count=true
 ```
 
@@ -147,7 +147,7 @@ GET /api/collections/posts?count=true
 Append `select={property}` to the query parameters, where `{property}` is the property you want to select. You can add multiple properties, separated by space.
 Example:
 
-```js
+```http
 GET /api/collections/answers?select=owner
 ```
 
