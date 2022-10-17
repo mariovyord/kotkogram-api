@@ -6,6 +6,10 @@ The REST API powers the app by providing users and data service. Data is stored 
 
 For educational purposes only!
 
+## **Demo**
+
+> <https://kotkogram-api.herokuapp.com/api>
+
 ## **Response structure**
 
 ```js
