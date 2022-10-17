@@ -48,9 +48,9 @@ router.post('/signup',
 
         } catch (err) {
             return res
-                .status(403)
+                .status(400)
                 .json({
-                    code: 403,
+                    code: 400,
                     message: 'Signup failed',
                     data: undefined,
                     errors: mapErrors(err),
@@ -83,9 +83,9 @@ router.post('/login',
 
         } catch (err) {
             return res
-                .status(403)
+                .status(401)
                 .json({
-                    code: 403,
+                    code: 401,
                     message: 'Login failed',
                     data: undefined,
                     errors: mapErrors(err),

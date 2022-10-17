@@ -15,7 +15,7 @@ const commentSchema = new Schema({
         ref: 'User',
         required: [true, 'Owner ID is required'],
     },
-    postId: {
+    post: {
         type: Types.ObjectId,
         ref: 'Post',
         required: [true, 'Post ID is required']
