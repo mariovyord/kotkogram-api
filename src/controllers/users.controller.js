@@ -38,6 +38,7 @@ router.post('/signup',
                 .cookie('jwt', result.token, {
                     httpOnly: true,
                     sameSite: false,
+                    expires: new Date(Date.now() + 31536000000), // 1 day life
                     secure: true,
                 })
                 .json({
@@ -72,7 +73,7 @@ router.post('/login',
                 .cookie('jwt', result.token, {
                     httpOnly: true,
                     sameSite: false,
-                    expires: new Date(Date.now() + 900000), // 15 min life
+                    expires: new Date(Date.now() + 31536000000), // 1 day life
                     secure: true,
                 })
                 .json({

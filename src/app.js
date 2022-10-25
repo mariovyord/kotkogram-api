@@ -13,7 +13,14 @@ dotenv.config();
 
 // middlewares
 app.enable('trust proxy');
-app.use(cors());
+app.use(cors(
+    {
+        origin: "http://localhost:4200",
+        methods: [['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS']],
+        allowedHeaders: ['Content-Type'],
+        credentials: true,
+    }
+));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
