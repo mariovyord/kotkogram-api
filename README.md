@@ -33,27 +33,27 @@ Some of the endpoints require for you to make authorized requests (marked below)
 
 `GET /api/users` - Returns endpoints.
 
-### `Sign up`
+### Sign up
 
 - `POST /api/users/signup` - Create new user. For User model check below. Returns created user's data and a jwt token in http-only cookie. If error occurs, returns `status 400`.
 
-### `Log in`
+### Log in
 
 - `POST /api/users/login` - Log in user with `username` and `password`. Returns user's data and a jwt token in http-only cookie. If error occurs, returns `status 401`.
 
-### `Log out`
+### Log out
 
 - `DELETE /api/users/logout` - Clears jwt cookie. **Authorized request!**
 
-### `Check if jwt token is valid`
+### Check if jwt token is valid
 
 - `/api/users/me` - Returns user's data if jwt token is valid. Otherwise returns `status 401` or `status 403`. **Authorized request!**
 
-### `Get user's data`
+### Get user's data
 
 - `GET /api/users/:_id` - Returns data for user with matching ID. Limited to publicly available information. If no data is found, returns `status 404`. **Authorized request!**
 
-### `Edit user's data`
+### Edit user's data
 
 - `PATCH /api/users/:_id` - Edit user's data. For owners only. If error occurs, returns `status 400`. **Authorized request!**
 
@@ -61,30 +61,30 @@ Some of the endpoints require for you to make authorized requests (marked below)
 
 Basic structure: `'/api/collections/:collection/:_id'`
 
-### `GET`
+### GET
 
 - `GET /api/collections/:collection` - Returns array of objects. Returns status 404 if there are no results.
 - `GET /api/collections/:collection/:id` - Returns an object. Returns status 404 if there are is no result.
 
-### `POST`
+### POST
 
 - `POST /api/collections/:collection` - Creates new item in the chosen collection. Returns the created item. **Authorized request!**
 
-### `PATCH`
+### PATCH
 
 - `PATCH /api/collections/:collection/:_id` - Update item with matching ID. Returns the updated item. **Authorized request!**
 
-### `DELETE`
+### DELETE
 
 - `DELETE /api/collections/:collection/:_id` - Delete item with matching ID. Returns `status 202`. **Authorized request!**
 
-### `LIKE`
+### LIKE
 
 - `POST /api/collections/:collection/:_id/like` - Like or remove like (if its already liked) for item in collection. User's ID is automatically extracted from jwt cookie, so there is no need to put anything in request body. **Authorized request!**
 
 ## **Query parameters**
 
-### `Multiple query parameters of the same type`
+### Multiple query parameters of the same type
 
 You can put multiple queries of the same type.
 
@@ -94,7 +94,7 @@ Example:
 GET /api/collections/posts/62cd7b659032c071e10e4f8e?populate=owner&populate=post
 ```
 
-### `SORT`
+### SORT
 
 Append URL encoded string `sortBy={property asc/desc}` to the query parameters to sort by property name in ascending (`asc`) or descending (`desc`) order.
 
@@ -105,7 +105,7 @@ Example:
 GET /api/collections/posts?sortBy=createdAt%20desc
 ```
 
-### `SEARCH`
+### SEARCH
 
 Append URL encoded string `where={property=value}` to the query parameters. Only full matches will be returned.
 
@@ -116,7 +116,7 @@ Example:
 GET /api/collections/posts?where=owner%3D%228f414b4fab394d36bedb2ad69da9c830%22
 ```
 
-### `PAGINATION`
+### PAGINATION
 
 *By default the service returns 10 entries.*
 
@@ -128,7 +128,7 @@ Example: Second page of entries from the answers collection, assuming 10 entries
 GET /api/collections/posts?page=2&pageSize=10
 ```
 
-### `POPULATE`
+### POPULATE
 
 Append `populate={property}` to the query parameters, where `{property}` is the property you want to populate with data.
 Example:
@@ -137,7 +137,7 @@ Example:
 GET /api/collections/posts/62cd7b659032c071e10e4f8e?populate=owner
 ```
 
-### `COUNT`
+### COUNT
 
 Append `count=true` to the query parameters. It can be combined with `SEARCH` query.
 Example:
@@ -146,7 +146,7 @@ Example:
 GET /api/collections/posts?count=true
 ```
 
-### `SELECT`
+### SELECT
 
 Append `select={property}` to the query parameters, where `{property}` is the property you want to select. You can add multiple properties, separated by space.
 Example:
@@ -157,7 +157,7 @@ GET /api/collections/answers?select=owner
 
 ## **Data models**
 
-### `User Model`
+### User Model
 
 ```js
 {
@@ -171,7 +171,7 @@ GET /api/collections/answers?select=owner
 }
 ```
 
-### `Post model`
+### Post model
 
 ```js
 {
@@ -182,7 +182,7 @@ GET /api/collections/answers?select=owner
 }
 ```
 
-### `Comment model`
+### Comment model
 
 ```js
 {
