@@ -24,10 +24,10 @@ router.all('/', (req, res) => {
 })
 
 router.post('/signup',
-    body('username').optional().escape(),
-    body('firstName').optional().escape(),
-    body('lastName').optional().escape(),
-    body('description').optional().escape(),
+    body('username').optional().escape().trim(),
+    body('firstName').optional().escape().trim(),
+    body('lastName').optional().escape().trim(),
+    body('description').optional().escape().trim(),
     body('password').optional().trim(),
     async (req, res) => {
         try {
@@ -60,7 +60,7 @@ router.post('/signup',
     });
 
 router.post('/login',
-    body('username').optional().escape(),
+    body('username').optional().escape().trim(),
     body('password').optional().trim(),
     async (req, res) => {
         try {
@@ -164,10 +164,10 @@ router.get('/:_id',
 
 router.patch('/:_id',
     authenticateToken(),
-    body('username').optional().escape(),
-    body('firstName').optional().escape(),
-    body('lastName').optional().escape(),
-    body('description').optional().escape(),
+    body('username').optional().escape().trim(),
+    body('firstName').optional().escape().trim(),
+    body('lastName').optional().escape().trim(),
+    body('description').optional().escape().trim(),
     async (req, res) => {
         try {
             const userId = res.locals.user._id;
