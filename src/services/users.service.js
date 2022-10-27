@@ -52,6 +52,16 @@ exports.getUserData = async (userId) => {
     return User.findById(userId).select('-password -__v');
 }
 
+exports.isUsernameUnique = async (username) => {
+    const existing = await User.findOne({ username: username.toLowerCase() });
+
+    if (existing) {
+        throw new Error('Username already exists')
+    }
+
+    return true;
+}
+
 exports.patchUserData = async (userId, data) => {
     const user = await User.findById(userId);
 

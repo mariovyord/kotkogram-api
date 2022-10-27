@@ -199,5 +199,35 @@ router.patch('/:_id',
     }
 );
 
+router.post('/isunique',
+    body('username').escape().trim(),
+    async (req, res) => {
+        try {
+            // get username from body and call service
+            const username = req.body.username;
+
+            await usersService.isUsernameUnique(username);
+
+            // return response
+            return res.json({
+                code: 200,
+                message: 'Username is available',
+                data: true,
+            });
+
+        } catch (err) {
+            return res
+                .status(409)
+                .json({
+                    code: 409,
+                    message: 'Username is unavailable',
+                    data: false,
+                    errors: mapErrors(err),
+                });
+        }
+    }
+);
+
+
 module.exports = router;
 
