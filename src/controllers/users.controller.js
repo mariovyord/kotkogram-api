@@ -24,10 +24,10 @@ router.all('/', (req, res) => {
 })
 
 router.post('/signup',
-    body('username').optional().escape().trim(),
-    body('firstName').optional().escape().trim(),
-    body('lastName').optional().escape().trim(),
-    body('description').optional().escape().trim(),
+    body('username').optional().trim(),
+    body('firstName').optional().trim(),
+    body('lastName').optional().trim(),
+    body('description').optional().trim(),
     body('password').optional().trim(),
     async (req, res) => {
         try {
@@ -60,7 +60,7 @@ router.post('/signup',
     });
 
 router.post('/login',
-    body('username').optional().escape().trim(),
+    body('username').optional().trim(),
     body('password').optional().trim(),
     async (req, res) => {
         try {
@@ -164,10 +164,10 @@ router.get('/:_id',
 
 router.patch('/:_id',
     authenticateToken(),
-    body('username').optional().escape().trim(),
-    body('firstName').optional().escape().trim(),
-    body('lastName').optional().escape().trim(),
-    body('description').optional().escape().trim(),
+    body('username').optional().trim(),
+    body('firstName').optional().trim(),
+    body('lastName').optional().trim(),
+    body('description').optional().trim(),
     async (req, res) => {
         try {
             const userId = res.locals.user._id;
@@ -200,7 +200,7 @@ router.patch('/:_id',
 );
 
 router.post('/isunique',
-    body('username').escape().trim(),
+    body('username').trim(),
     async (req, res) => {
         try {
             // get username from body and call service

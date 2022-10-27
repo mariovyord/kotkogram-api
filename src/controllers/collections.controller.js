@@ -49,10 +49,10 @@ router.get('/:collection', async (req, res, next) => {
 // post new
 router.post('/:collection',
     authenticateToken(),
-    body('body').optional().escape().trim(),
-    body('postId').optional().escape().trim(),
+    body('body').optional().trim(),
+    body('postId').optional().trim(),
     body('imageUrl').optional().trim(),
-    body('description').optional().escape().trim(),
+    body('description').optional().trim(),
     async (req, res, next) => {
         try {
             const data = req.body;
@@ -102,10 +102,10 @@ router.get('/:collection/:_id', async (req, res, next) => {
 // update one
 router.patch('/:collection/:_id',
     authenticateToken(),
-    body('body').optional().escape().trim(),
-    body('postId').optional().escape().trim(),
+    body('body').optional().trim(),
+    body('postId').optional().trim(),
     body('imageUrl').optional().trim(),
-    body('description').optional().escape().trim(),
+    body('description').optional().trim(),
     async (req, res, next) => {
         try {
             const _id = req.params._id;
