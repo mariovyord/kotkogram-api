@@ -54,6 +54,7 @@ const userSchema = new Schema({
     followers: {
         type: [Types.ObjectId],
         default: [],
+        ref: 'User',
     },
     role: {
         type: String,
