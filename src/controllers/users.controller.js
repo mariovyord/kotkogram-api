@@ -207,7 +207,7 @@ router.post('/:_id/follow',
             const userId = res.locals.user._id;
 
             if (req.params === undefined || userId === followedUserId) {
-                throw new Error();
+                throw new Error('Invalid request');
             }
 
             await usersService.followUser(userId, followedUserId);
@@ -220,9 +220,9 @@ router.post('/:_id/follow',
 
         } catch (err) {
             return res
-                .status(404)
+                .status(400)
                 .json({
-                    code: 404,
+                    code: 400,
                     message: 'User could not be followed',
                     data: undefined,
                     errors: mapErrors(err.message),
