@@ -50,7 +50,7 @@ exports.getAll = async (Collection, query) => {
     }
 
     if (query.populate && (query.populate).includes('owner')) {
-        limitPopulate += 'username firstName lastName imageUrl'
+        limitPopulate += 'username firstName lastName imageUrl followers'
     }
 
     // Select properties
