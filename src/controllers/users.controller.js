@@ -199,6 +199,37 @@ router.patch('/:_id',
     }
 );
 
+router.post('/:_id/follow',
+    authenticateToken(),
+    async (req, res) => {
+        try {
+            const followedUserId = req.params._id;
+            const userId = res.locals.user._id;
+
+            if (req.params === undefined || userId === followedUserId) {
+                throw new Error();
+            }
+
+            await usersService.followUser(userId, followedUserId);
+
+            return res.json({
+                code: 200,
+                message: 'User followed successfully',
+                data: undefined,
+            });
+
+        } catch (err) {
+            return res
+                .status(404)
+                .json({
+                    code: 404,
+                    message: 'User could not be followed',
+                    data: undefined,
+                    errors: mapErrors(err.message),
+                });
+        }
+    });
+
 router.post('/isunique',
     body('username').trim(),
     async (req, res) => {

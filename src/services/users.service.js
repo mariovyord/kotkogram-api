@@ -75,3 +75,21 @@ exports.patchUserData = async (userId, data) => {
     await user.save();
     return user;
 }
+
+exports.followUser = async (userId, followedUserId) => {
+    const user = await User.findById(followedUserId);
+
+    if (!user) throw new Error();
+
+    const userIndex = user.followers?.indexOf(userId);
+
+    if (userIndex === -1) {
+        user.followers.push(userId);
+    } else {
+        user.followers.splice(userIndex, 1);
+    }
+
+    await user.save();
+    return user;
+}
+

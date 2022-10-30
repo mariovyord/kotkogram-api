@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const { Schema, Types, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 const beautifyUnique = require('mongoose-beautiful-unique-validation');
 
-mongoose.Schema.Types.String.set('trim', true);
+Schema.Types.String.set('trim', true);
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
     username: {
         type: String,
         required: [true, 'Username is required'],
@@ -51,6 +51,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'https://i.imgur.com/73kg6yl.png'
     },
+    followers: {
+        type: [Types.ObjectId],
+        default: [],
+    },
     role: {
         type: String,
         enum: ['user', 'moderator', 'admin'],
@@ -84,6 +88,6 @@ userSchema.pre('save', async function (next) {
 function noBlacklistedChars(params) {
     return /\W/.test(params) === false;
 }
-const User = mongoose.model('User', userSchema);
+const User = model('User', userSchema);
 
 module.exports = User;
