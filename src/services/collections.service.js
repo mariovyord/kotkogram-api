@@ -1,12 +1,12 @@
 exports.getAll = async (Collection, query) => {
     const options = {};
-    console.log(query)
     // Search
     if (Array.isArray(query.where)) {
         query.where
             .forEach(x => {
                 const [prop, value] = x.split('=');
-                options[prop] = value;
+                if (options[prop] === undefined) { options[prop] = [] }
+                options[prop].push(value);
             })
     } else if (typeof query.where === 'string') {
         const [prop, value] = query.where.split('=');
@@ -50,7 +50,7 @@ exports.getAll = async (Collection, query) => {
     }
 
     if (query.populate && (query.populate).includes('owner')) {
-        limitPopulate += 'username firstName lastName imageUrl followers'
+        limitPopulate += 'username firstName lastName imageUrl following'
     }
 
     // Select properties

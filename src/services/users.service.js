@@ -68,7 +68,6 @@ exports.patchUserData = async (userId, data) => {
     if (!user) throw new Error();
 
     for (let key of Object.keys(data)) {
-        console.log(key);
         user[key] = data[key];
     }
 
@@ -77,16 +76,16 @@ exports.patchUserData = async (userId, data) => {
 }
 
 exports.followUser = async (userId, followedUserId) => {
-    const user = await User.findById(followedUserId);
+    const [user, followedUser] = await Promise.all([User.findById(userId), User.findById(followedUserId)])
 
-    if (!user) throw new Error('User does not exist');
+    if (!user || !followedUser) throw new Error('User does not exist');
 
-    const userIndex = user.followers?.indexOf(userId);
+    const userIndex = user.following?.indexOf(followedUserId);
 
     if (userIndex === -1) {
-        user.followers.push(userId);
+        user.following.push(followedUserId);
     } else {
-        user.followers.splice(userIndex, 1);
+        user.following.splice(userIndex, 1);
     }
 
     await user.save();

@@ -167,7 +167,7 @@ GET /api/collections/answers?select=owner
     password: string, // hashed on save
     description: string, // optional
     imageUrl: string, // optional
-    followers: ObjectId[], ref: 'User'
+    following: ObjectId[], ref: 'User'
     role: ['user', 'moderator', 'admin']
 }
 ```

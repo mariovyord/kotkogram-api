@@ -51,7 +51,7 @@ const userSchema = new Schema({
         type: String,
         default: 'https://i.imgur.com/73kg6yl.png'
     },
-    followers: {
+    following: {
         type: [Types.ObjectId],
         default: [],
         ref: 'User',
