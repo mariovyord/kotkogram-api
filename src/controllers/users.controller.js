@@ -214,7 +214,7 @@ router.post('/:_id/follow',
 
             return res.json({
                 code: 200,
-                message: 'User followed successfully',
+                message: 'Operation successful',
                 data: undefined,
             });
 

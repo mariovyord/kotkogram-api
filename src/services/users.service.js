@@ -79,7 +79,7 @@ exports.patchUserData = async (userId, data) => {
 exports.followUser = async (userId, followedUserId) => {
     const user = await User.findById(followedUserId);
 
-    if (!user) throw new Error();
+    if (!user) throw new Error('User does not exist');
 
     const userIndex = user.followers?.indexOf(userId);
 
