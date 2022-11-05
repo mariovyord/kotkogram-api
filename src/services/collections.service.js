@@ -88,7 +88,7 @@ exports.getOne = async (collection, _id, query) => {
         populate += query.populate;
 
         if (query.populate.includes('owner')) {
-            limitPopulate += 'firstName lastName imageUrl'
+            limitPopulate += 'username firstName lastName imageUrl following'
         }
     }
     return collection

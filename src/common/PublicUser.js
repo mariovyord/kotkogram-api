@@ -5,7 +5,7 @@ class PublicUser {
         this.firstName = user.firstName;
         this.lastName = user.lastName;
         this.description = user.description;
-        this.following = user.following;
+        this.following = user.following.map(x => x.toString());
         this.imageUrl = user.imageUrl;
     }
 }

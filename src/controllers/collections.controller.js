@@ -33,13 +33,11 @@ router.get('/:collection', async (req, res, next) => {
 
         const result = await collectionsService.getAll(collection, query);
 
-        const responseJson = {
+        return res.json({
             code: 200,
             message: `List of ${collectionName}`,
             data: result,
-        }
-
-        return res.json(responseJson);
+        });
 
     } catch (err) {
         next(err);
@@ -62,14 +60,12 @@ router.post('/:collection',
 
             const result = await collectionsService.create(collection, { owner: userId, ...data });
 
-            const responseJson = {
-                code: 201,
-                message: `Created item in ${collectionName}`,
-                data: result,
-            }
-
             return res.status(201)
-                .json(responseJson);
+                .json({
+                    code: 201,
+                    message: `Created item in ${collectionName}`,
+                    data: result,
+                });
 
         } catch (err) {
             next(err);
@@ -86,13 +82,11 @@ router.get('/:collection/:_id', async (req, res, next) => {
 
         const result = await collectionsService.getOne(collection, _id, query);
 
-        const responseJson = {
+        return res.json({
             code: 200,
             message: `Details of item in posts`,
             data: result,
-        }
-
-        return res.json(responseJson);
+        });
 
     } catch (err) {
         next(err);
@@ -115,13 +109,11 @@ router.patch('/:collection/:_id',
 
             const result = await collectionsService.update(collection, _id, userId, req.body);
 
-            const responseJson = {
+            return res.json({
                 code: 200,
                 message: `Updated item in posts`,
                 data: result
-            }
-
-            return res.json(responseJson);
+            });
 
         } catch (err) {
             next(err);
@@ -140,13 +132,11 @@ router.delete('/:collection/:_id',
 
             await collectionsService.remove(collection, _id, userId);
 
-            const responseJson = {
+            return res.status(202).json({
                 code: 202,
                 message: `Deleted item in ${collectionName}`,
                 data: undefined,
-            }
-
-            return res.status(202).json(responseJson);
+            });
 
         } catch (err) {
             next(err);
@@ -165,13 +155,11 @@ router.post('/:collection/:_id/like',
 
             const result = await collectionsService.like(collection, postId, new Types.ObjectId(userId));
 
-            const responseJson = {
+            return res.json({
                 code: 200,
                 message: `Voted for item in posts`,
                 data: result,
-            }
-
-            return res.json(responseJson);
+            });
 
         } catch (err) {
             next(err);
