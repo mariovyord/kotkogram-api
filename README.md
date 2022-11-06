@@ -107,7 +107,7 @@ Some of the endpoints require for you to make authorized requests (marked below)
 
 ### Check if username is unique
 
-- `POST /api/users/isunique` - Check if username is unique. If error occurs, returns `status 409`. **Authorized request!**
+- `POST /api/users/isunique` - Check if username is unique. If error occurs, returns `status 409`. 
 
 ```js
 {
