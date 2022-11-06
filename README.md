@@ -35,11 +35,29 @@ Some of the endpoints require for you to make authorized requests (marked below)
 
 ### Sign up
 
-- `POST /api/users/signup` - Create new user. For User model check below. Returns created user's data and a jwt token in http-only cookie. If error occurs, returns `status 400`.
+- `POST /api/users/signup` - Create new user. For User model check below. Returns created user data and a jwt token in http-only cookie. If error occurs, returns `status 400`.
+
+```js
+{
+    username: string,
+    firstName: string,
+    lastName: string,
+    password: string, // hashed on save
+    description: string, // optional
+    imageUrl: string, // optional
+}
+```
 
 ### Log in
 
-- `POST /api/users/login` - Log in user with `username` and `password`. Returns user's data and a jwt token in http-only cookie. If error occurs, returns `status 401`.
+- `POST /api/users/login` - Log in user with `username` and `password`. Returns user data and a jwt token in http-only cookie. If error occurs, returns `status 401`.
+
+```js
+{
+    username: string,
+    password: string, 
+}
+```
 
 ### Log out
 
@@ -47,15 +65,59 @@ Some of the endpoints require for you to make authorized requests (marked below)
 
 ### Check if jwt token is valid
 
-- `/api/users/me` - Returns user's data if jwt token is valid. Otherwise returns `status 401` or `status 403`. **Authorized request!**
+- `/api/users/me` - Returns user data if jwt token is valid. Otherwise returns `status 401` or `status 403`. **Authorized request!**
 
-### Get user's data
+### Get user data
 
 - `GET /api/users/:_id` - Returns data for user with matching ID. Limited to publicly available information. If no data is found, returns `status 404`. **Authorized request!**
 
-### Edit user's data
+### Edit user data
 
-- `PATCH /api/users/:_id` - Edit user's data. For owners only. If error occurs, returns `status 400`. **Authorized request!**
+- `PATCH /api/users/:_id` - Edit user data. For owners only. If error occurs, returns `status 400`. Username cannot be edited. Password edit is on another endpoint. **Authorized request!**
+
+```js
+{
+    "firstName": string, // optional
+    "lastName": string, // optional
+    "description": string, // optional
+    "imageUrl": string, // optional
+}
+```
+
+### Edit user password
+
+- `PATCH /api/users/:_id/password` - Edit user password. For owners only. If error occurs, returns `status 409`. **Authorized request!**
+
+```js
+{
+    "oldPassword": string,
+    "newPassword": string,
+}
+```
+
+### Check if password is valid
+
+- `POST /api/users/:_id/password` - Check if password is valid. For owners only. If error occurs, returns `status 409`. **Authorized request!**
+
+```js
+{
+    "password": string,
+}
+```
+
+### Check if username is unique
+
+- `POST /api/users/isunique` - Check if username is unique. If error occurs, returns `status 409`. **Authorized request!**
+
+```js
+{
+    "username": string,
+}
+```
+
+### Add user to *following* list
+
+- `POST /api/users/:_id/follow` - Follow user. `_id` param is of the user you wish to follow.  If error occurs, returns `status 400`. **Authorized request!**
 
 ## **Data service**
 
@@ -80,7 +142,7 @@ Basic structure: `'/api/collections/:collection/:_id'`
 
 ### LIKE
 
-- `POST /api/collections/:collection/:_id/like` - Like or remove like (if its already liked) for item in collection. User's ID is automatically extracted from jwt cookie, so there is no need to put anything in request body. **Authorized request!**
+- `POST /api/collections/:collection/:_id/like` - Like or remove like (if its already liked) for item in collection. User ID is automatically extracted from jwt cookie, so there is no need to put anything in request body. **Authorized request!**
 
 ## **Query parameters**
 

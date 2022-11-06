@@ -230,6 +230,80 @@ router.post('/:_id/follow',
         }
     });
 
+router.post('/:_id/password',
+    authenticateToken(),
+    body('password').trim(),
+    async (req, res) => {
+        try {
+            // get password from body and call service
+            const password = req.body.password;
+            const requestedUserId = req.params._id;
+            const userId = res.locals.user._id;
+
+            if (userId != requestedUserId) {
+                throw new Error('Invalid user');
+            }
+
+            await usersService.isCorrectPassword(userId, password);
+
+            // return response
+            return res.json({
+                code: 200,
+                message: 'Password is correct',
+                data: true,
+            });
+
+        } catch (err) {
+            return res
+                .status(409)
+                .json({
+                    code: 409,
+                    message: 'Password is incorrect',
+                    data: false,
+                    errors: mapErrors(err),
+                });
+        }
+    }
+);
+
+router.patch('/:_id/password',
+    authenticateToken(),
+    body('oldPassword').trim(),
+    body('newPassword').trim(),
+    async (req, res) => {
+        try {
+            // get password from body and call service
+            const newPassword = req.body.newPassword;
+            const oldPassword = req.body.oldPassword;
+            const userId = res.locals.user._id;
+            const requestedUserId = req.params._id;
+
+            if (userId != requestedUserId) {
+                throw new Error('Invalid user');
+            }
+
+            const user = await usersService.changePassword(userId, oldPassword, newPassword);
+
+            // return response
+            return res.json({
+                code: 200,
+                message: 'Password changed',
+                data: new PublicUser(user),
+            });
+
+        } catch (err) {
+            return res
+                .status(409)
+                .json({
+                    code: 409,
+                    message: 'Password change failed',
+                    data: undefined,
+                    errors: mapErrors(err),
+                });
+        }
+    }
+);
+
 router.post('/isunique',
     body('username').trim(),
     async (req, res) => {
@@ -258,7 +332,6 @@ router.post('/isunique',
         }
     }
 );
-
 
 module.exports = router;
 

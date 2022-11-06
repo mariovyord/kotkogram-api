@@ -92,3 +92,38 @@ exports.followUser = async (userId, followedUserId) => {
     return user;
 }
 
+exports.isCorrectPassword = async (userId, password) => {
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new Error('User does not exist');
+    }
+
+    const match = await user.comparePassword(password);
+
+    if (!match) {
+        throw new Error('Incorrect password');
+    }
+
+    return user;
+}
+
+exports.changePassword = async (userId, oldPassword, newPassword) => {
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new Error('User does not exist');
+    }
+
+    const match = await user.comparePassword(oldPassword);
+
+    if (!match) {
+        throw new Error('Incorrect password');
+    }
+
+    user.password = newPassword;
+
+    await user.save();
+
+    return user;
+}
