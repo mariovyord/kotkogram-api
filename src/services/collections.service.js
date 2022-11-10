@@ -118,12 +118,12 @@ exports.update = async (collection, _id, userId, data) => {
 }
 
 exports.remove = async (collection, _id, userId) => {
-    const post = await collection.findById(_id);
-    if (post === null) throw new Error('Item does not exist');
+    const item = await collection.findById(_id);
+    if (item === null) throw new Error('Item does not exist');
 
-    if (post.owner != userId) throw new Error('Only owners can delete items')
+    if (item.owner != userId) throw new Error('Only owners can delete items')
 
-    post.remove()
+    item.remove()
 }
 
 exports.like = async (collection, itemId, userId) => {

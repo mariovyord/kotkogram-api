@@ -29,4 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(router);
 app.use(handleErrors());
 
-module.exports = app;
+const io = require('socket.io')();
+require('./socket')(io)
+
+module.exports = { app, io };
