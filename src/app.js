@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(router);
 app.use(handleErrors());
 
-const io = require('socket.io')();
+const io = require('socket.io')({ cors: { origin: '*' } });
 require('./socket')(io)
 
 module.exports = { app, io };

@@ -1,8 +1,15 @@
 module.exports = (io) => {
+    const messageIo = io.of('/socket/message')
 
-    io.on('connection', socket => {
+    messageIo.use((socket, next) => {
+        next();
+    })
 
-        console.log('new connection');
+    messageIo.on('connection', socket => {
+
+        socket.on('message', (msg) => {
+            messageIo.emit('message', `${msg}`);
+        })
 
         socket.on('disconnect', () => console.log('disconnected'));
 
