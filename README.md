@@ -6,9 +6,12 @@ The REST API powers the app by providing users and data service. Data is stored 
 
 For educational purposes only!
 
-## **Demo**
+## **How to use**
 
-> <https://kotkogram-api.herokuapp.com/api>
+1. You need local instance of MongoDB
+2. Install dependecies: `npm i`
+3. Start server on port 5000: `npm i`
+4. Enjoy!
 
 ## **Response structure**
 
@@ -107,7 +110,7 @@ Some of the endpoints require for you to make authorized requests (marked below)
 
 ### Check if username is unique
 
-- `POST /api/users/isunique` - Check if username is unique. If error occurs, returns `status 409`. 
+- `POST /api/users/isunique` - Check if username is unique. If error occurs, returns `status 409`.
 
 ```js
 {
