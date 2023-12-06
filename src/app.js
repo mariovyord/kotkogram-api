@@ -13,11 +13,12 @@ dotenv.config();
 
 // middlewares
 app.enable('trust proxy');
+app.disable('etag');
 app.use(cors(
     {
-        origin: "http://localhost:4200",
+        origin: ["https://kotkogram.web.app", "http://localhost:4200"],
         methods: [['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS']],
-        allowedHeaders: ['Content-Type'],
+        allowedHeaders: ['Content-Type', 'Cache-Control', 'Pragma', 'Expires'],
         credentials: true,
     }
 ));
